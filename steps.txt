@@ -1,0 +1,9 @@
+# # 
+1.
+pip3 install --upgrade google-api-python-client oauth2client
+
+# # 
+2.
+download config file for google account
+
+# #
