@@ -1,0 +1,8 @@
+hello $FIRST $LAST,
+
+We are informing you about an Event, $EVENT, that is going to be happening on $DATE in $REMDAYS.
+
+All of MESA hopes to see you there!
+
+Signed,
+  Important MESA-ite.
