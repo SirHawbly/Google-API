@@ -1,3 +1,12 @@
+# #
+cal 
+	- https://developers.google.com/calendar/
+	- https://developers.google.com/calendar/quickstart/python
+
+mail  
+	- https://developers.google.com/gmail/api/
+	- https://developers.google.com/gmail/api/quickstart/python
+
 # # 
 1.
 pip3 install --upgrade google-api-python-client oauth2client
@@ -7,3 +16,9 @@ pip3 install --upgrade google-api-python-client oauth2client
 download config file for google account
 
 # #
+3. 
+reset token.json
+
+# # 
+4. 
+run python code?
