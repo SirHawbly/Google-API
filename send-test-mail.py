@@ -55,38 +55,6 @@ from apiclient import errors, discovery  #needed for gmail service
             # Set a new credentials_path for the new credential (because it's 
 							# another file)
 
-def get_credentials():
-    # If needed create folder for credential
-    home_dir = os.path.expanduser('~') #>> C:\Users\Me
-		# >>C:\Users\Me\.credentials   (it's a folder)
-    # credential_dir = os.path.join(home_dir, '.credentials') 
-    credential_dir = os.path.join('', '.credentials') 
-    if not os.path.exists(credential_dir):
-				#create folder if doesnt exist
-        os.makedirs(credential_dir)  
-    credential_path = os.path.join(credential_dir, 'cred send mail.json')
-
-    #Store the credential
-    store = oauth2client.file.Storage(credential_path)
-    credentials = store.get()
-
-    if not credentials or credentials.invalid:
-        CLIENT_SECRET_FILE = 'mail-client-cred.json'
-        APPLICATION_NAME = 'Gmail API Python Send Email'
-        #The scope URL for read/write access to a user's calendar data  
-
-        SCOPES = 'https://www.googleapis.com/auth/gmail.send'
-
-        # Create a flow object. (it assists with OAuth 2.0 steps to get user 
-					# authorization + credentials)
-        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
-        flow.user_agent = APPLICATION_NAME
-
-        credentials = tools.run_flow(flow, store)
-
-    return credentials
-
-
 
 
 ## Get creds, prepare message and send it
@@ -273,8 +241,8 @@ def main():
     subject = "subject test1"
     message_text_html  = r'Hi<br/>Html <b>hello</b>'
     message_text_plain = "Hi\nPlain Email"
-    # attached_file = r'/Users/cbar/coup.txt'
     attached_file = '/Users/cbar/Desktop/EquipmentLoanAgreement.pdf'
+    # attached_file = r'/Users/cbar/coup.txt'
     # attached_file = '/Users/cbar/coup.txt'
     create_message_and_send(sender, to, subject, message_text_plain, message_text_html, attached_file)
 

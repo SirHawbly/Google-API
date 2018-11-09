@@ -1,37 +1,72 @@
+# https://developers.google.com/calendar/create-events
 
 # Refer to the Python quickstart on how to setup the environment:
 # https://developers.google.com/calendar/quickstart/python
 # Change the scope to 'https://www.googleapis.com/auth/calendar' and delete any
 # stored credentials.
 
-event = {
-  'summary': 'Google I/O 2015',
-  'location': '800 Howard St., San Francisco, CA 94103',
-  'description': 'A chance to hear more about Google\'s developer products.',
-  'start': {
-    'dateTime': '2015-05-28T09:00:00-07:00',
-    'timeZone': 'America/Los_Angeles',
-  },
-  'end': {
-    'dateTime': '2015-05-28T17:00:00-07:00',
-    'timeZone': 'America/Los_Angeles',
-  },
-  'recurrence': [
-    'RRULE:FREQ=DAILY;COUNT=2'
-  ],
-  'attendees': [
-    {'email': 'lpage@example.com'},
-    {'email': 'sbrin@example.com'},
-  ],
-  'reminders': {
-    'useDefault': False,
-    'overrides': [
-      {'method': 'email', 'minutes': 24 * 60},
-      {'method': 'popup', 'minutes': 10},
-    ],
-  },
-}
+from __future__ import print_function
+import datetime
+from googleapiclient.discovery import build
+from httplib2 import Http
+from oauth2client import file, client, tools
 
-event = service.events().insert(calendarId='primary', body=event).execute()
-print 'Event created: %s' % (event.get('htmlLink'))
+# If modifying these scopes, delete the file token.json.
+SCOPES = 'https://www.googleapis.com/auth/calendar'
+
+def main():
+  """Shows basic usage of the Google Calendar API.
+  Prints the start and name of the next 10 events on the user's calendar.
+  """
+  store = file.Storage('token.json')
+  creds = store.get()
+  if not creds or creds.invalid:
+    flow = client.flow_from_clientsecrets('cal-client-cred.json', SCOPES)
+    creds = tools.run_flow(flow, store)
+  service = build('calendar', 'v3', http=creds.authorize(Http()))
+
+  # Create an httplib2.Http object to handle our HTTP requests, and authorize 
+	  # it using credentials.authorize()
+  http = Http()
+
+  # http is the authorized httplib2.Http() 
+    # or: http = credentials.authorize(httplib2.Http())
+  http = creds.authorize(http)        
+
+  service = build('calendar', 'v3', http=creds.authorize(Http()))
+
+  event = {
+    'summary': 'Google I/O 2018',
+    'location': '800 Howard St., San Francisco, CA 94103',
+    'description': 'A chance to hear more about Google\'s developer products.',
+    'start': {
+      'dateTime': '2018-10-10T09:00:00-07:00',
+      'timeZone': 'America/Los_Angeles',
+    },
+    'end': {
+      'dateTime': '2018-10-10T17:00:00-07:00',
+      'timeZone': 'America/Los_Angeles',
+    },
+    'recurrence': [
+      'RRULE:FREQ=DAILY;COUNT=2'
+    ],
+    'attendees': [
+      {'email': 'lpage@example.com'},
+      {'email': 'sbrin@example.com'},
+    ],
+    'reminders': {
+      'useDefault': False,
+      'overrides': [
+        {'method': 'email', 'minutes': 24 * 60},
+        {'method': 'popup', 'minutes': 10},
+      ],
+    },
+  }
+ 
+  event = service.events().insert(calendarId='primary', body=event).execute()
+  print('Event created: %s' % (event.get('htmlLink')))
+
+
+if __name__ == '__main__':
+    main()
 
