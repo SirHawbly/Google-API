@@ -24,7 +24,10 @@ from email.mime.application import MIMEApplication
 
 from apiclient import errors, discovery  #needed for gmail service
 
+SCOPES = 'https://www.googleapis.com/auth/gmail.send'
 
+CLIENT_SECRET_FILE = 'mail-client-cred.json'
+APPLICATION_NAME = 'Gmail API Python Send Email'
 
 
 ## About credentials
@@ -54,6 +57,29 @@ from apiclient import errors, discovery  #needed for gmail service
 							# that contains the new scope.
             # Set a new credentials_path for the new credential (because it's 
 							# another file)
+
+
+def get_credentials():
+    # If needed create folder for credential
+    home_dir = os.path.expanduser('~') #>> C:\Users\me
+    credential_dir = os.path.join(home_dir, '.credentials') # >>C:\Users\me\.credentials   (it's a folder)
+    if not os.path.exists(credential_dir):
+        os.makedirs(credential_dir)  #create folder if doesnt exist
+    credential_path = os.path.join(credential_dir, 'gmail-python-email-send.json')
+
+    #Store the credential
+    store = oauth2client.file.Storage(credential_path)
+    credentials = store.get()
+
+    if not credentials or credentials.invalid:
+    # Create a flow object. (it assists with OAuth 2.0 steps to get user authorization + credentials)
+        flow = client.flow_from_clientsecrets(CLIENT_SECRET_FILE, SCOPES)
+        flow.user_agent = APPLICATION_NAME
+        credentials = tools.run_flow(flow, store)
+        print('Storing credentials to ' + credential_path)
+
+    return credentials
+
 
 
 
@@ -235,12 +261,21 @@ def send_Message_with_attachement(service, user_id, message_with_attachment, mes
         print (f'An error occurred: {error}')
 
 
+
+def read_email_in(filename):
+	text = ''
+	with open(filename) as file_in:
+		for line in file_in:
+			text += line
+	return text
+
+
 def main():
     to = "bartlett@pdx.edu"
     sender = "bartlett@pdx.edu"
     subject = "subject test1"
     message_text_html  = r'Hi<br/>Html <b>hello</b>'
-    message_text_plain = "Hi\nPlain Email"
+    message_text_plain = read_email_in('email-template.txt')
     attached_file = '/Users/cbar/Desktop/EquipmentLoanAgreement.pdf'
     # attached_file = r'/Users/cbar/coup.txt'
     # attached_file = '/Users/cbar/coup.txt'
