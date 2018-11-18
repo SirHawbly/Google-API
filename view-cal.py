@@ -39,8 +39,8 @@ def main():
 				# 2018-11-09T14:00:00-08:00 Hiss
         print(start, event['summary'])
 
-    for item in events[0]:
-        print(item, events[0][item])
+    # for item in events[0]:
+        # print(item, events[0][item])
 
 if __name__ == '__main__':
     main()

@@ -10,11 +10,59 @@ import datetime
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
+import json
+
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = 'https://www.googleapis.com/auth/calendar'
 
-def main():
+
+COLORS = {
+           "blue"      : 1,
+           "green"     : 2,
+           "purple"    : 3,
+           "red"       : 4,
+           "yellow"    : 5,
+           "orange"    : 6,
+           "turquoise" : 7,
+           "gray"      : 8,
+         }
+
+# 2018-12-07T14:00:00-08:00 Hiss
+# 2018-12-14T08:30:00-08:00
+def create_event_time(json_time):
+
+  json_obj = json.loads(json_time)
+  yr  = json_obj['year'] 
+  mth = json_obj['month']
+  day = json_obj['day']
+  hr  = json_obj['hour']
+  mi  = json_obj['minute']
+  tz  = json_obj['timezone']
+
+  time_string = ""
+  time_string += str(yr) + '-'
+
+  if(mth < 10): time_string += '0' + str(mth) + '-'
+  else:  			  time_string +=			 str(mth) + '-'
+
+  if(day < 10): time_string += '0' + str(day) + 'T'
+  else:					time_string += 			 str(day) + 'T'
+	
+  if(hr < 10):  time_string += '0' + str(hr) + ':'
+  else:					time_string += 			 str(hr) + ':'
+
+  if(mi < 10):  time_string += '0' + str(mi) + ':00-'
+  else:					time_string += 			 str(mi) + ':00-'
+
+  if(tz < 10):  time_string += '0' + str(tz) + ':00'
+  else: 				time_string += 			 str(tz) + ':00'
+
+  return time_string
+
+
+def main(json_event):
+
   """Shows basic usage of the Google Calendar API.
   Prints the start and name of the next 10 events on the user's calendar.
   """
@@ -35,38 +83,53 @@ def main():
 
   service = build('calendar', 'v3', http=creds.authorize(Http()))
 
+  # colors = service.colors().get().execute()
+  # print(colors)
+
+  # summary, location, description, start_json, end_json, attendees)
+  event_obj = json.loads(json_event)
+  start_time = event_obj["start"]
+  end_time = event_obj['end']
+
   event = {
-    'summary': 'Google I/O 2018',
-    'location': '800 Howard St., San Francisco, CA 94103',
-    'description': 'A chance to hear more about Google\'s developer products.',
+    'summary': event_obj['summary'],
+    'location': event_obj['location'],
+    'description': event_obj['description'],
     'start': {
-      'dateTime': '2018-10-10T09:00:00-07:00',
+      'dateTime': create_event_time(start_time),
       'timeZone': 'America/Los_Angeles',
     },
     'end': {
-      'dateTime': '2018-10-10T17:00:00-07:00',
+      'dateTime': create_event_time(end_time),
       'timeZone': 'America/Los_Angeles',
     },
-    'recurrence': [
-      'RRULE:FREQ=DAILY;COUNT=2'
-    ],
-    'attendees': [
-      {'email': 'lpage@example.com'},
-      {'email': 'sbrin@example.com'},
-    ],
     'reminders': {
-      'useDefault': False,
-      'overrides': [
-        {'method': 'email', 'minutes': 24 * 60},
-        {'method': 'popup', 'minutes': 10},
-      ],
+      'useDefault': True,
     },
+		'colorId' : COLORS[event_obj['color']]
   }
- 
+
   event = service.events().insert(calendarId='primary', body=event).execute()
   print('Event created: %s' % (event.get('htmlLink')))
 
 
 if __name__ == '__main__':
-    main()
+
+  summary = 'adsfsummary'
+  location = 'herern'
+  description = 'vgooddescription'
+  s1 = {"year":2018, "month":11, "day":18, "hour":19, "minute":30, "timezone":8}
+  s2 = {"year":2018, "month":11, "day":18, "hour":21, "minute":30, "timezone":8}
+
+  string = {}
+  string["summary"] = summary
+  string["location"] = location
+  string["description"] = description
+  string["start"] = json.dumps(s1)
+  string["end"] = json.dumps(s2)
+  string["color"] = 'green'
+
+  print(json.dumps(string))
+
+  main(json.dumps(string))
 
