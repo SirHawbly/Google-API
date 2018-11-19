@@ -24,12 +24,10 @@ def parse_json_time(json_obj):
         {'y':2018,'t':11,'d':18,'h':18,'m':30}
     """
 
-    # print(json_obj)
-
     t = {}
+
+    # print(json_obj)
     tokens = json_obj.split("T")
-    date_obj = tokens[0]
-    time_obj = tokens[1]
 
 	  # pull the first half with the date info
 	  # parse it by hyphens
@@ -37,19 +35,15 @@ def parse_json_time(json_obj):
     t['y'] = int(date_obj[0])
     t['t'] = int(date_obj[1])
     t['d'] = int(date_obj[2]) 
-    # print(t)
 
     # pull the second half of the date 
     # parse it by hyphens then by colons
-    # tokens[1] = tokens[1].split("-")
-    # time_obj = tokens[1][0].split(":")
-
     time_obj = tokens[1].split("-")
     time_obj = time_obj[0].split(":")
-
     t['h'] = int(time_obj[0])
     t['m'] = int(time_obj[1])
 
+		# return the dict obj
     print(t)
     return t 
 
@@ -68,6 +62,7 @@ def get_remain_days(json_event_time):
     # print (json_event_time)
 		# pull out the date_time of the json obj
     date_time = json_event_time['dateTime']
+
     # parse the date_time string and get a dict back
     t = parse_json_time(date_time)
 		
@@ -76,6 +71,7 @@ def get_remain_days(json_event_time):
 
     # pull the current day
     today = d.datetime.today()
+
     # convert todays date to be midnight
     today = d.datetime.combine(today, d.datetime.min.time())
 
@@ -88,15 +84,22 @@ def main():
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
     """
+
+    # grab the token and credentials
     store = file.Storage('token.json')
     creds = store.get()
+
+    # if we do not have creds request them
     if not creds or creds.invalid:
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
         creds = tools.run_flow(flow, store)
+
+    # get a HTTP connection to googles calendar
     service = build('calendar', 'v3', http=creds.authorize(Http()))
 
     # Call the Calendar API
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+
     print('Getting the upcoming 10 events')
     events_result = service.events().list(calendarId='primary', timeMin=now,
                                         maxResults=10, singleEvents=True,
@@ -110,9 +113,6 @@ def main():
 				# 2018-11-09T14:00:00-08:00 Hiss
         print(start, event['summary'])
         print (get_remain_days(event['start']).days)
-
-    # for item in events[0]:
-        # print(item, events[0][item])
 
 
 if __name__ == '__main__':

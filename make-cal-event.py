@@ -32,6 +32,8 @@ COLORS = {
 # 2018-12-14T08:30:00-08:00
 def create_event_time(json_time):
 
+	# load the json obj, and index the
+	# contents with variables
   json_obj = json.loads(json_time)
   yr  = json_obj['year'] 
   mth = json_obj['month']
@@ -43,6 +45,8 @@ def create_event_time(json_time):
   time_string = ""
   time_string += str(yr) + '-'
 
+	# pull in the other fields, adding 0 padding 
+	# when needed
   if(mth < 10): time_string += '0' + str(mth) + '-'
   else:  			  time_string +=			 str(mth) + '-'
 
@@ -58,6 +62,7 @@ def create_event_time(json_time):
   if(tz < 10):  time_string += '0' + str(tz) + ':00'
   else: 				time_string += 			 str(tz) + ':00'
 
+	# return string
   return time_string
 
 
@@ -66,31 +71,36 @@ def main(json_event):
   """Shows basic usage of the Google Calendar API.
   Prints the start and name of the next 10 events on the user's calendar.
   """
+
+	# grab the json token, and get credentials
   store = file.Storage('token.json')
   creds = store.get()
+
+	# if we dont have credentials we need to 
+	# request them
   if not creds or creds.invalid:
     flow = client.flow_from_clientsecrets('cal-client-cred.json', SCOPES)
     creds = tools.run_flow(flow, store)
   service = build('calendar', 'v3', http=creds.authorize(Http()))
 
   # Create an httplib2.Http object to handle our HTTP requests, and authorize 
-	  # it using credentials.authorize()
+	# it using credentials.authorize()
   http = Http()
 
   # http is the authorized httplib2.Http() 
-    # or: http = credentials.authorize(httplib2.Http())
+  # or: http = credentials.authorize(httplib2.Http())
   http = creds.authorize(http)        
 
   service = build('calendar', 'v3', http=creds.authorize(Http()))
-
-  # colors = service.colors().get().execute()
-  # print(colors)
 
   # summary, location, description, start_json, end_json, attendees)
   event_obj = json.loads(json_event)
   start_time = event_obj["start"]
   end_time = event_obj['end']
 
+	# create an event using the provided fields
+	# summary, location, desc, start/end time, 
+	# reminders, and colorId
   event = {
     'summary': event_obj['summary'],
     'location': event_obj['location'],
@@ -115,6 +125,7 @@ def main(json_event):
 
 if __name__ == '__main__':
 
+	# make some json obj to pass in
   summary = 'adsfsummary'
   location = 'herern'
   description = 'vgooddescription'
@@ -127,7 +138,7 @@ if __name__ == '__main__':
   string["description"] = description
   string["start"] = json.dumps(s1)
   string["end"] = json.dumps(s2)
-  string["color"] = 'green'
+  string["color"] = 'blue'
 
   print(json.dumps(string))
 
