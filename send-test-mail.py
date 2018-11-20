@@ -1,4 +1,4 @@
-# # from: 
+# # modified from: 
 # https://stackoverflow.com/questions/42601324/python-3-6-gmail-api-send-email-with-attachement
 
 import httplib2
