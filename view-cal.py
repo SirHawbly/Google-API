@@ -86,11 +86,10 @@ def main():
     Prints the start and name of the next 10 events on the user's calendar.
     """
 
-    # grab the token and credentials
+    # grab the users token (has user's access and refresh tokens)
+		# if they dont exist then they are created upon autorization
     store = file.Storage('token.json')
     creds = store.get()
-
-    # if we do not have creds request them
     if not creds or creds.invalid:
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
         creds = tools.run_flow(flow, store)
@@ -100,7 +99,6 @@ def main():
 
     # Call the Calendar API
     now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-
     print('Getting the upcoming 10 events')
     events_result = service.events().list(calendarId='primary', timeMin=now,
                                         maxResults=10, singleEvents=True,

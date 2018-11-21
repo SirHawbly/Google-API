@@ -34,22 +34,33 @@ cal_days = get_days()
 # --
 def print_calendar():
 
+	# print the weekday headers (first three chars) then a newline
   for day in WEEK_DAYS:
     print(' ' + day[0:3] + '  ', end='')
   print()
 
+	# add padding to the cal, so if the first day
+	# is thursday, itll show under thursday
   day = cal_days[0]
   for i in range(day['weekday']):
+  # print('mm-dd ', end='')
     print('      ', end='')
-    # print('mm-dd ', end='')
 
+	# go through all days printing mm-dd, print newlines on sunday and 
+	# at the end of the loop
   for day in cal_days:
     print(str(day['month']).zfill(2) + '-' + 
             str(day['day']).zfill(2) + ' ', end='')
     if (day['weekday'] == 6):
        print()
   print()
+
+  return
 # --
 
 
+# print the calenday using the cal_days variable we have
 print_calendar()
+
+
+# --
