@@ -21,18 +21,17 @@ def get_days():
     temp_date['month']   = temp_datetime.month
     temp_date['year']    = temp_datetime.year
     temp_date['weekday'] = temp_datetime.weekday()
+    temp_date['events'] = []
     days.append(temp_date)
 
   return days
 # --
 
 
-cal_days = get_days()
-# print (cal_days)
 
 
 # --
-def print_calendar():
+def print_calendar(cal_days):
 
 	# print the weekday headers (first three chars) then a newline
   for day in WEEK_DAYS:
@@ -59,8 +58,16 @@ def print_calendar():
 # --
 
 
-# print the calenday using the cal_days variable we have
-print_calendar()
+def main():
+  cal_days = get_days()
+  # print (cal_days)
+
+  # print the calenday using the cal_days variable we have
+  print_calendar()
+
+
+if __name__ == '__main__':
+    main()
 
 
 # --
