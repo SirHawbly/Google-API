@@ -17,6 +17,14 @@ import json
 # If modifying these scopes, delete the file token.json.
 SCOPES = 'https://www.googleapis.com/auth/calendar'
 
+TIME_ZONES = {
+               'Hawaii':{'name': 'Pacific/Honolulu', 'value': 10,},
+               'Alaska':{'name': 'America/Juneau', 'value': 9,},
+               'Pacific':{'name': 'America/Los_Angeles', 'value': 8,},
+               'Mountain':{'name': 'America/Denver', 'value': 7,},
+               'Central':{'name': 'America/Chicago', 'value': 6,},
+               'Eastern':{'name': 'America/New_York', 'value': 5,},
+             }
 
 COLORS = {
            "blue"      : 1,
@@ -48,21 +56,21 @@ def create_event_time(json_time):
 
 	# pull in the other fields, adding 0 padding 
 	# when needed
+  # month
   if(mth < 10): time_string += '0' + str(mth) + '-'
   else:  			  time_string +=			 str(mth) + '-'
-
+  # day
   if(day < 10): time_string += '0' + str(day) + 'T'
   else:					time_string += 			 str(day) + 'T'
-	
+  # hour 
   if(hr < 10):  time_string += '0' + str(hr) + ':'
   else:					time_string += 			 str(hr) + ':'
-
+  # minutes
   if(mi < 10):  time_string += '0' + str(mi) + ':00-'
   else:					time_string += 			 str(mi) + ':00-'
-
+  # timezone
   if(tz < 10):  time_string += '0' + str(tz) + ':00'
   else: 				time_string += 			 str(tz) + ':00'
-
 
   # print out the json_time vs the outputted string
   print("input:", json_time)
@@ -124,11 +132,11 @@ def main(json_event):
     'description': event_obj['description'],
     'start': {
       'dateTime': create_event_time(start_time),
-      'timeZone': 'America/Los_Angeles',
+      'timeZone': event_obj['zone_name'],
     },
     'end': {
       'dateTime': create_event_time(end_time),
-      'timeZone': 'America/Los_Angeles',
+      'timeZone': event_obj['zone_name'],
     },
     'reminders': {
       'useDefault': True,
@@ -140,8 +148,8 @@ def main(json_event):
 
   input('\nwaiting....\n')
 
-  # event = service.events().insert(calendarId='primary', body=event).execute()
-  # print('Event created: %s' % (event.get('htmlLink')))
+  event = service.events().insert(calendarId='primary', body=event).execute()
+  print('Event created: %s' % (event.get('htmlLink')))
 
   print('\nDone.\n')
 
@@ -154,8 +162,13 @@ if __name__ == '__main__':
   summary = 'adsfsummary'
   location = 'herern'
   description = 'vgooddescription'
-  s1 = {"year":2018, "month":11, "day":24, "hour":22, "minute":30, "timezone":8}
-  s2 = {"year":2018, "month":11, "day":24, "hour":23, "minute":30, "timezone":8}
+
+  zone = 'Alaska'
+  tz_nam = TIME_ZONES[zone]['name']
+  tz_val = TIME_ZONES[zone]['value']
+	
+  s1 = {"year":2018, "month":11, "day":24, "hour":22, "minute":30, "timezone":tz_val}
+  s2 = {"year":2018, "month":11, "day":24, "hour":23, "minute":30, "timezone":tz_val}
 
   string = {}
   string["summary"] = summary
@@ -163,7 +176,8 @@ if __name__ == '__main__':
   string["description"] = description
   string["start"] = json.dumps(s1)
   string["end"] = json.dumps(s2)
-  string["color"] = 'red'
+  string["color"] = 'yellow'
+  string['zone_name'] = tz_nam
 
   # print(json.dumps(string))
   main(json.dumps(string))
