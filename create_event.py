@@ -63,7 +63,11 @@ def create_event_time(json_time):
   if(tz < 10):  time_string += '0' + str(tz) + ':00'
   else: 				time_string += 			 str(tz) + ':00'
 
-	# return string
+
+  # print out the json_time vs the outputted string
+  print("input:", json_time)
+  print("output:", time_string)
+  
   return time_string
 
 
@@ -92,12 +96,24 @@ def main(json_event):
   # or: http = credentials.authorize(httplib2.Http())
   http = creds.authorize(http)        
 
+  # get a connection to google calendar
   service = build('calendar', 'v3', http=creds.authorize(Http()))
 
-  # summary, location, description, start_json, end_json, attendees)
+	# load in the passed file, and pull the times out 
+  # of it
   event_obj = json.loads(json_event)
   start_time = event_obj["start"]
   end_time = event_obj['end']
+
+  # printing out the object that was passed, and its 
+  # different forms (as well as the times inside)
+  print("Passed Obj (in json):\n", json_event)
+  print("\nLoaded Obj (in list):", event_obj)
+  print("\nTimes:")
+  print("\tStart -", start_time) 
+  print("\tEnd -", end_time)
+
+  input('\nwaiting....\n')
 
 	# create an event using the provided fields
 	# summary, location, desc, start/end time, 
@@ -120,8 +136,16 @@ def main(json_event):
 		'colorId' : COLORS[event_obj['color']]
   }
 
-  event = service.events().insert(calendarId='primary', body=event).execute()
-  print('Event created: %s' % (event.get('htmlLink')))
+  print("\nNew Event output:", event)
+
+  input('\nwaiting....\n')
+
+  # event = service.events().insert(calendarId='primary', body=event).execute()
+  # print('Event created: %s' % (event.get('htmlLink')))
+
+  print('\nDone.\n')
+
+  return
 
 
 if __name__ == '__main__':
@@ -130,8 +154,8 @@ if __name__ == '__main__':
   summary = 'adsfsummary'
   location = 'herern'
   description = 'vgooddescription'
-  s1 = {"year":2018, "month":11, "day":18, "hour":19, "minute":30, "timezone":8}
-  s2 = {"year":2018, "month":11, "day":18, "hour":21, "minute":30, "timezone":8}
+  s1 = {"year":2018, "month":11, "day":24, "hour":22, "minute":30, "timezone":8}
+  s2 = {"year":2018, "month":11, "day":24, "hour":23, "minute":30, "timezone":8}
 
   string = {}
   string["summary"] = summary
@@ -139,9 +163,8 @@ if __name__ == '__main__':
   string["description"] = description
   string["start"] = json.dumps(s1)
   string["end"] = json.dumps(s2)
-  string["color"] = 'blue'
+  string["color"] = 'red'
 
-  print(json.dumps(string))
-
+  # print(json.dumps(string))
   main(json.dumps(string))
 

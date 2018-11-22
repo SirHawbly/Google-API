@@ -63,7 +63,7 @@ def main():
   # print (cal_days)
 
   # print the calenday using the cal_days variable we have
-  print_calendar()
+  print_calendar(cal_days)
 
 
 if __name__ == '__main__':

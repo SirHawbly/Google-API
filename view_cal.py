@@ -103,7 +103,7 @@ def main():
     store = file.Storage('token.json')
     creds = store.get()
     if not creds or creds.invalid:
-        flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
+        flow = client.flow_from_clientsecrets('event-client-cred.json', SCOPES)
         creds = tools.run_flow(flow, store)
 
     # get a HTTP connection to googles calendar
@@ -163,10 +163,10 @@ def main():
         if (len(day['events']) != 0):
             print('Day that has Events:', day['month'], day['day'])
             for event in day['events']:
-                print('\tevent timestamp:', event['start'])
-                print('\tevent summary:', event['summary'])
+                print(day['events'].index(event), '\tevent timestamp:', event['start'])
+                print('\tevent summary:', event['summary'], '\n')
 
-    input('\nDone.\n')
+    print('\nDone.\n')
 
 
 # --
