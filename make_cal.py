@@ -1,13 +1,22 @@
+
 from datetime import date, timedelta, datetime
 
+# --
+
+
+# --
+
 MAX_DAYS = 30
+today = datetime.today()
+max_delta = timedelta(days=MAX_DAYS)
 WEEK_DAYS = ['Monday','Tuesday','Wednesday','Thursday',
 							'Friday','Saturday','Sunday']
 
-today = datetime.today()
-max_delta = timedelta(days=MAX_DAYS)
+# --
+
 
 # --
+
 def get_days():
 
   days = []
@@ -25,12 +34,12 @@ def get_days():
     days.append(temp_date)
 
   return days
-# --
-
-
-
 
 # --
+
+
+# --
+
 def print_calendar(cal_days):
 
 	# print the weekday headers (first three chars) then a newline
@@ -58,6 +67,8 @@ def print_calendar(cal_days):
 # --
 
 
+# --
+
 def main():
   cal_days = get_days()
   # print (cal_days)
@@ -65,9 +76,12 @@ def main():
   # print the calenday using the cal_days variable we have
   print_calendar(cal_days)
 
+# --
+
+
+# --
 
 if __name__ == '__main__':
     main()
-
 
 # --

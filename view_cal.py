@@ -14,12 +14,16 @@ import datetime as d
 from make_cal import get_days,print_calendar
 import json
 
+# --
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = 'https://www.googleapis.com/auth/calendar'
 
+# --
+
 
 # --
+
 def parse_time_string(date_str):
     """
         input:
@@ -56,6 +60,7 @@ def parse_time_string(date_str):
 
 
 # --
+
 def get_remain_days(json_event_time):
     """input:
 				{'dateTime': '2018-11-18T18:30:00-08:00', 
@@ -88,7 +93,9 @@ def get_remain_days(json_event_time):
 
 # --
 
+
 # --
+
 def main():
     """
       Shows basic usage of the Google Calendar API.
@@ -168,10 +175,13 @@ def main():
 
     print('\nDone.\n')
 
+    return events
 
 # --
 
+
 # --
+
 if __name__ == '__main__':
     main()
 

@@ -159,16 +159,16 @@ def main(json_event):
 if __name__ == '__main__':
 
 	# make some json obj to pass in
-  summary = 'adsfsummary'
-  location = 'herern'
-  description = 'vgooddescription'
+  summary = 'An Event'
+  location = 'PSU'
+  description = 'description'
 
-  zone = 'Alaska'
+  zone = 'Pacific'
   tz_nam = TIME_ZONES[zone]['name']
   tz_val = TIME_ZONES[zone]['value']
 	
-  s1 = {"year":2018, "month":11, "day":24, "hour":22, "minute":30, "timezone":tz_val}
-  s2 = {"year":2018, "month":11, "day":24, "hour":23, "minute":30, "timezone":tz_val}
+  s1 = {"year":2018, "month":12, "day":15, "hour":20, "minute":30, "timezone":tz_val}
+  s2 = {"year":2018, "month":12, "day":15, "hour":22, "minute":30, "timezone":tz_val}
 
   string = {}
   string["summary"] = summary
